@@ -1,8 +1,10 @@
 use crate::{
-    download::DownloadLookupError,
-    error::ApiError,
-    models::{AttachmentResponse, Entry, EntryResponse},
-    state::AppState,
+    api::{
+        DEFAULT_ENTRY_LIMIT, DOWNLOAD_PATH, ENTRIES_PATH, EXTEND_DOWNLOAD_LIFETIME_PATH,
+        FORM_CONTENT_FIELD, FORM_FILE_FIELD, FORM_NAME_FIELD, HEALTH_PATH, MAX_ENTRY_LIMIT,
+    },
+    models::{AttachmentResponse, EntryResponse},
+    server::{download::DownloadLookupError, error::ApiError, models::Entry, state::AppState},
 };
 
 use actix_files::NamedFile;
@@ -15,9 +17,6 @@ use chrono::{DateTime, Utc};
 use futures_util::{StreamExt, TryStreamExt};
 use mongodb::bson::doc;
 use serde::Deserialize;
-
-const DEFAULT_LIMIT: i64 = 20;
-const MAX_LIMIT: i64 = 100;
 
 #[derive(Debug, Deserialize)]
 pub struct GetEntriesParams {
@@ -45,15 +44,18 @@ pub struct ExtendDownloadParams {
 
 pub fn configure_routes(config: &mut web::ServiceConfig) {
     config
-        .route("/", web::get().to(greet))
-        .route("/add_entry", web::post().to(add_entry))
-        .route("/get_entries", web::get().to(get_entries))
-        .route("/download", web::get().to(download_file))
-        .route("/extend", web::post().to(extend_download_lifetime));
+        .route(HEALTH_PATH, web::get().to(health))
+        .route(ENTRIES_PATH, web::post().to(add_entry))
+        .route(ENTRIES_PATH, web::get().to(get_entries))
+        .route(DOWNLOAD_PATH, web::get().to(download_file))
+        .route(
+            EXTEND_DOWNLOAD_LIFETIME_PATH,
+            web::post().to(extend_download_lifetime),
+        );
 }
 
-pub async fn greet() -> HttpResponse {
-    HttpResponse::Ok().body("Hello elogbook backend. Use /get_entries and /add_entry.")
+pub async fn health() -> HttpResponse {
+    HttpResponse::Ok().body("elogbook server is running")
 }
 
 pub async fn add_entry(
@@ -71,9 +73,9 @@ pub async fn add_entry(
         let field_name = field.name().unwrap_or_default().to_string();
 
         match field_name.as_str() {
-            "name" => name = read_text_field(field).await?,
-            "content" => content = read_text_field(field).await?,
-            "file" => {
+            FORM_NAME_FIELD => name = read_text_field(field).await?,
+            FORM_CONTENT_FIELD => content = read_text_field(field).await?,
+            FORM_FILE_FIELD => {
                 let id = attachments.len() as u32 + 1;
                 attachments.push(state.attachments.save_field(field, created_at, id).await?);
             }
@@ -100,7 +102,10 @@ pub async fn get_entries(
 ) -> Result<HttpResponse, ApiError> {
     state.downloads.clean_expired().await;
 
-    let limit = params.limit.unwrap_or(DEFAULT_LIMIT).clamp(1, MAX_LIMIT);
+    let limit = params
+        .limit
+        .unwrap_or(DEFAULT_ENTRY_LIMIT as i64)
+        .clamp(1, MAX_ENTRY_LIMIT as i64);
     let mut cursor = state
         .entries
         .find(doc! { "created_at": { "$type": "date" } })

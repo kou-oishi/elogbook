@@ -1,4 +1,4 @@
-use crate::models::{Attachment, Entry};
+use crate::frontend::models::{Attachment, Entry};
 
 use pulldown_cmark::{html, Options, Parser};
 use yew::prelude::*;

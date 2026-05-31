@@ -1,4 +1,4 @@
-use crate::models::{Attachment, DownloadClient, DownloadRequest};
+use crate::server::models::{Attachment, DownloadClient, DownloadRequest};
 
 use chrono::{Duration, Utc};
 use std::{collections::HashMap, sync::Arc};

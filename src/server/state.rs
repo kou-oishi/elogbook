@@ -1,4 +1,4 @@
-use crate::{
+use crate::server::{
     attachments::AttachmentStore, config::AppConfig, download::DownloadRegistry, models::Entry,
 };
 

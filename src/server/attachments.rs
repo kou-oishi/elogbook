@@ -1,4 +1,4 @@
-use crate::{error::ApiError, models::Attachment};
+use crate::server::{error::ApiError, models::Attachment};
 
 use actix_multipart::Field;
 use chrono::{DateTime, Datelike, Utc};

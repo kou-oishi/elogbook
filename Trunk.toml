@@ -1,0 +1,6 @@
+[build]
+target = "public/index.html"
+dist = "dist"
+
+[watch]
+watch = ["public/", "src/frontend/", "src/api.rs", "src/models.rs"]

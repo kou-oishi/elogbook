@@ -6,6 +6,7 @@ pub struct AppConfig {
     pub mongodb_uri: String,
     pub database_name: String,
     pub attachments_dir: PathBuf,
+    pub web_dir: PathBuf,
 }
 
 impl AppConfig {
@@ -19,12 +20,16 @@ impl AppConfig {
         let attachments_dir = env::var("ATTACHMENTS_DIR")
             .map(PathBuf::from)
             .unwrap_or_else(|_| PathBuf::from("./attachments"));
+        let web_dir = env::var("WEB_DIR")
+            .map(PathBuf::from)
+            .unwrap_or_else(|_| PathBuf::from("./dist"));
 
         Ok(Self {
             server_addr,
             mongodb_uri,
             database_name,
             attachments_dir: absolutize(attachments_dir)?,
+            web_dir: absolutize(web_dir)?,
         })
     }
 }

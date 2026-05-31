@@ -1,4 +1,4 @@
-use crate::app::{Model, Msg};
+use crate::frontend::app::{Model, Msg};
 
 use wasm_bindgen::{prelude::Closure, JsCast, JsValue};
 

@@ -1,15 +1,27 @@
+pub mod attachments;
+pub mod config;
+pub mod download;
+pub mod error;
+pub mod handlers;
+pub mod models;
+pub mod state;
+
+pub use handlers::configure_routes;
+
 use actix_cors::Cors;
+use actix_files::Files;
 use actix_web::{web, App, HttpServer};
-use elogbook::{config::AppConfig, configure_routes, state::AppState};
+use config::AppConfig;
+use state::AppState;
 use std::io;
 
-#[actix_web::main]
-async fn main() -> io::Result<()> {
+pub async fn run() -> io::Result<()> {
     let config = AppConfig::from_env().map_err(to_io_error)?;
     let state = web::Data::new(AppState::connect(&config).await.map_err(to_io_error)?);
     let server_addr = config.server_addr.clone();
+    let web_dir = config.web_dir.clone();
 
-    println!("elogbook backend listening on http://{server_addr}");
+    println!("elogbook listening on http://{server_addr}");
 
     HttpServer::new(move || {
         App::new()
@@ -22,6 +34,7 @@ async fn main() -> io::Result<()> {
             )
             .app_data(state.clone())
             .configure(configure_routes)
+            .service(Files::new("/", web_dir.clone()).index_file("index.html"))
     })
     .bind(server_addr)?
     .run()

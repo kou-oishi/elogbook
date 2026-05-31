@@ -143,6 +143,8 @@ body {
     flex-shrink: 0;
     height: 15vh;
     /* フッターの高さを設定 */
+    width: 100%;
+    box-sizing: border-box;
     position: sticky;
     bottom: 0;
     z-index: 1;
@@ -152,7 +154,8 @@ body {
 
 /* Markdownエディタ */
 .input-box {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: 1em;
     box-sizing: border-box;
     resize: none;
@@ -160,23 +163,30 @@ body {
     /* 横幅をフッター全体に合わせる */
 }
 
-/* EasyMDEエディタコンテナの高さを絶対値に設定 */
+/* EasyMDEエディタコンテナ */
+.EasyMDEContainer,
 .easyMDEContainer {
+    flex: 1 1 auto;
     height: 100%;
-    /* エディタ全体の高さを300pxに固定 */
+    min-width: 0;
     width: 100% !important;
     /* 横幅をフッターに合わせる */
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 /* EasyMDEツールバーのカスタムCSS */
+.EasyMDEContainer .editor-toolbar,
 .easyMDEContainer .editor-toolbar {
+    flex: 0 0 auto;
     height: 25px;
     /* ツールバーの全体的な高さを調整 */
     padding: 0;
     /* パディングを取り除く */
 }
 
+.EasyMDEContainer .editor-toolbar a,
 .easyMDEContainer .editor-toolbar a {
     padding: 0px 0px;
     /* 各アイコンのパディングを調整 */
@@ -184,6 +194,7 @@ body {
     /* アイコン間のスペースを縮小 */
 }
 
+.EasyMDEContainer .editor-toolbar button,
 .easyMDEContainer .editor-toolbar button {
     height: 15px;
     /* 各ボタンの高さを縮小 */
@@ -191,6 +202,7 @@ body {
     /* ボタン内のアイコン位置を中央揃えにする */
 }
 
+.EasyMDEContainer .editor-toolbar a svg,
 .easyMDEContainer .editor-toolbar a svg {
     width: 15px;
     /* アイコンの幅を縮小 */
@@ -200,7 +212,11 @@ body {
 
 /* エディタ部分 (CodeMirror) の高さ調整 */
 .CodeMirror {
-    max-height: 100%;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    max-height: none;
     /* フッターの高さに応じて100%に */
     overflow-y: auto;
     /* 縦スクロールを有効化 */
@@ -209,6 +225,11 @@ body {
     box-sizing: border-box;
     padding-right: 10px;
     /* スクロールバーとテキストの間に余白 */
+}
+
+.EasyMDEContainer .CodeMirror,
+.easyMDEContainer .CodeMirror {
+    flex: 1 1 auto;
 }
 
 /* プレビュー全体の配置 */

@@ -1,5 +1,11 @@
-use crate::models::{Entry, EntryResponse};
-
+use crate::{
+    api::{
+        CLIENT_QUERY, DOWNLOAD_PATH, ENTRIES_PATH, EXTEND_DOWNLOAD_LIFETIME_PATH, LIMIT_QUERY,
+        OFFSET_QUERY, TOKEN_QUERY,
+    },
+    frontend::models::Entry,
+    models::EntryResponse,
+};
 use gloo_net::http::Request;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::FormData;
@@ -20,23 +26,26 @@ impl ApiClient {
 
     pub fn entries_url(&self, limit: u32, offset: u64) -> String {
         self.url(&format!(
-            "/get_entries?client={}&limit={limit}&offset={offset}",
-            self.client_hash
+            "{}?{}={}&{}={limit}&{}={offset}",
+            ENTRIES_PATH, CLIENT_QUERY, self.client_hash, LIMIT_QUERY, OFFSET_QUERY
         ))
     }
 
     pub fn add_entry_url(&self) -> String {
-        self.url("/add_entry")
+        self.url(ENTRIES_PATH)
     }
 
     pub fn extend_download_lifetime_url(&self) -> String {
-        self.url(&format!("/extend?client={}", self.client_hash))
+        self.url(&format!(
+            "{}?{}={}",
+            EXTEND_DOWNLOAD_LIFETIME_PATH, CLIENT_QUERY, self.client_hash
+        ))
     }
 
     pub fn download_url(&self, token: &str) -> String {
         self.url(&format!(
-            "/download?client={}&token={token}",
-            self.client_hash
+            "{}?{}={}&{}={token}",
+            DOWNLOAD_PATH, CLIENT_QUERY, self.client_hash, TOKEN_QUERY
         ))
     }
 
@@ -60,7 +69,7 @@ pub async fn fetch_entries(url: &str) -> Result<Vec<Entry>, String> {
         .await
         .map_err(|error| format!("failed to decode entries: {error}"))?
         .into_iter()
-        .map(EntryResponse::into_entry)
+        .map(Entry::try_from)
         .collect()
 }
 

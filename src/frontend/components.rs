@@ -1,4 +1,4 @@
-use crate::{api::ApiClient, models::Entry, render::markdown_to_html};
+use crate::frontend::{api::ApiClient, models::Entry, render::markdown_to_html};
 
 use chrono::Local;
 use yew::prelude::*;

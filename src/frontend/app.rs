@@ -1,9 +1,12 @@
 use crate::{
-    api::{fetch_entries, post_form, ApiClient},
-    components::{EditorHost, EntryList, Header},
-    config::{API_BASE, DEFAULT_LIMIT},
-    js_bridge::{log_error, make_client_hash, register_entry_callback},
-    models::Entry,
+    api::{FORM_CONTENT_FIELD, FORM_FILE_FIELD, FORM_NAME_FIELD},
+    frontend::{
+        api::{fetch_entries, post_form, ApiClient},
+        components::{EditorHost, EntryList, Header},
+        config::{API_BASE, DEFAULT_LIMIT},
+        js_bridge::{log_error, make_client_hash, register_entry_callback},
+        models::Entry,
+    },
 };
 
 use gloo_net::http::Request;
@@ -69,15 +72,15 @@ impl Model {
     fn submit_entry(&self, ctx: &Context<Self>, content: String, attachments: Vec<web_sys::File>) {
         let form_data = FormData::new().expect("browser must support FormData");
         form_data
-            .append_with_str("name", &self.submitter_name)
+            .append_with_str(FORM_NAME_FIELD, &self.submitter_name)
             .expect("append name to FormData");
         form_data
-            .append_with_str("content", &content)
+            .append_with_str(FORM_CONTENT_FIELD, &content)
             .expect("append content to FormData");
 
         for file in attachments {
             form_data
-                .append_with_blob_and_filename("file", &file, &file.name())
+                .append_with_blob_and_filename(FORM_FILE_FIELD, &file, &file.name())
                 .expect("append file to FormData");
         }
 
@@ -107,7 +110,7 @@ impl Model {
                 link.send_message(Msg::ReceiveLatestEntry(entries.and_then(|mut entries| {
                     entries
                         .pop()
-                        .ok_or_else(|| "new entry was not returned by backend".to_string())
+                        .ok_or_else(|| "new entry was not returned by server".to_string())
                 })));
             } else {
                 link.send_message(Msg::ReceiveEntries(entries));

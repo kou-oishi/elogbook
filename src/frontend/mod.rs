@@ -6,6 +6,6 @@ mod js_bridge;
 mod models;
 mod render;
 
-fn main() {
+pub fn run() {
     yew::Renderer::<app::Model>::new().render();
 }

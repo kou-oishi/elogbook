@@ -1,16 +1,13 @@
 # Build outputs
 target/
 dist/
-frontend/dist/
-backend/target/
-frontend/target/
 
 # Local runtime data
-backend/.env
-backend/attachments/
+.env
+attachments/
 
 # Editor-local files
-**/.vscode/launch.json
+**/.vscode
 
 # OS/editor noise
 .DS_Store

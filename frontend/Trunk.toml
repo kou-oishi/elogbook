@@ -1,6 +1,0 @@
-[build]
-target = "public/index.html"
-dist = "dist"
-
-[watch]
-watch = ["public/", "src/"]
