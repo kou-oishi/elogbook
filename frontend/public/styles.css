@@ -1,0 +1,329 @@
+/* ベース設定 */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 全体のコンテナ */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ヘッダー */
+.header {
+    background-color: #060050;
+    padding: 4px 10px;
+    text-align: left;
+    box-shadow: 0px 1px 3px rgba(0, 6, 82, 0.3);
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.header-flex {
+    display: flex;
+    align-items: center;
+    /* ボタンとタイトルの垂直位置を中央揃えに */
+}
+
+.header h1 {
+    font-size: 1em;
+    margin: 0;
+    color: #ffffff;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    background-image:
+        linear-gradient(to bottom, rgba(208, 231, 255, 0.5) 1px, transparent 1px),
+        linear-gradient(to right, rgba(208, 231, 255, 0.5) 1px, transparent 1px),
+        linear-gradient(to right, #4a90e2 1px, transparent 1px),
+        linear-gradient(to right, #4a90e2 1px, transparent 1px);
+    background-size: 20px 20px, 20px 20px, 1px 100%, 1px 100%;
+    background-position: left 130px top, left 130px top, left 129px top, left 131px top;
+    background-repeat: repeat, repeat, no-repeat, no-repeat;
+    background-attachment: local;
+}
+
+/* エントリリスト */
+.entries-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.submitter-name {
+    font-size: 1em;
+    color: #060050;
+    flex-shrink: 0;
+    text-align: left;
+    width: 90px;
+    padding-right: 25px;
+}
+
+.entry-date {
+    width: 110px;
+    background-color: rgba(255, 255, 255, 1);
+
+    font-size: 1em;
+    font-weight: bold;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.entry-date-border {
+    color: #110169;
+    border-bottom: 1px solid #4a90e2;
+    margin: 10px 0 10px 0;
+}
+
+/* エントリ全体のスタイル */
+.entry-item {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    white-space: pre-wrap;
+}
+
+/* タイムスタンプ */
+.timestamp {
+    font-size: 0.8em;
+    color: #666;
+    flex-shrink: 0;
+    text-align: right;
+    width: 90px;
+    padding-right: 25px;
+}
+
+/* ログテキスト */
+.log-text {
+    font-size: 0.9em;
+    color: #444;
+    word-wrap: break-word;
+    flex: 1;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0 0 0 16px;
+}
+
+.log-text p {
+    margin: 0;
+}
+
+/* resize-divider */
+.resize-divider {
+    width: 100%;
+    height: 4px;
+    background-color: #ccc;
+    cursor: ns-resize;
+    position: relative;
+}
+
+/* フッター */
+.footer {
+    background-color: #f1f1f1;
+    padding: 4px;
+    display: flex;
+    align-items: flex-start;
+    flex-shrink: 0;
+    height: 15vh;
+    /* フッターの高さを設定 */
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    overflow: hidden;
+    /* フッター内のオーバーフローを隠す */
+}
+
+/* Markdownエディタ */
+.input-box {
+    flex: 1;
+    font-size: 1em;
+    box-sizing: border-box;
+    resize: none;
+    width: 100%;
+    /* 横幅をフッター全体に合わせる */
+}
+
+/* EasyMDEエディタコンテナの高さを絶対値に設定 */
+.easyMDEContainer {
+    height: 100%;
+    /* エディタ全体の高さを300pxに固定 */
+    width: 100% !important;
+    /* 横幅をフッターに合わせる */
+    box-sizing: border-box;
+}
+
+/* EasyMDEツールバーのカスタムCSS */
+.easyMDEContainer .editor-toolbar {
+    height: 25px;
+    /* ツールバーの全体的な高さを調整 */
+    padding: 0;
+    /* パディングを取り除く */
+}
+
+.easyMDEContainer .editor-toolbar a {
+    padding: 0px 0px;
+    /* 各アイコンのパディングを調整 */
+    margin: 0 0px;
+    /* アイコン間のスペースを縮小 */
+}
+
+.easyMDEContainer .editor-toolbar button {
+    height: 15px;
+    /* 各ボタンの高さを縮小 */
+    line-height: 15px;
+    /* ボタン内のアイコン位置を中央揃えにする */
+}
+
+.easyMDEContainer .editor-toolbar a svg {
+    width: 15px;
+    /* アイコンの幅を縮小 */
+    height: 15px;
+    /* アイコンの高さを縮小 */
+}
+
+/* エディタ部分 (CodeMirror) の高さ調整 */
+.CodeMirror {
+    max-height: 100%;
+    /* フッターの高さに応じて100%に */
+    overflow-y: auto;
+    /* 縦スクロールを有効化 */
+    overflow-x: auto;
+    /* 横スクロールを非表示（必要であればautoに） */
+    box-sizing: border-box;
+    padding-right: 10px;
+    /* スクロールバーとテキストの間に余白 */
+}
+
+/* プレビュー全体の配置 */
+.file-previews {
+    position: absolute;
+    bottom: 18vh;
+    left: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    width: 50%;
+}
+
+.file-preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    color: white;
+    width: 100%;
+    height: 20%;
+    box-sizing: border-box;
+}
+
+/* 「×」ボタンのスタイル */
+.close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0;
+}
+
+.close-button:hover {
+    color: red;
+}
+
+/* サムネイル用のspan */
+.thumbnail-span {
+    flex-basis: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* サムネイル画像のスタイル */
+.preview-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.preview-icon {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+/* ファイル情報用のspan */
+.file-info {
+    flex-basis: 70%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.file-number {
+    font-weight: bold;
+    display: block;
+}
+
+.file-name {
+    font-size: 0.9em;
+    line-height: 1.2;
+}
+
+.image-attachment,
+.text-attachment,
+.pdf-attachment {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    position: relative;
+}
+
+.pdf-attachment iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+}
+
+.text-attachment pre {
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    text-align: left;
+}
+
+.attachment-download {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.attachment-download:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
